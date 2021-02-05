@@ -1,0 +1,241 @@
+﻿<Window x:Class="DemoRent.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DemoRent.Views"
+        xmlns:vm="clr-namespace:DemoRent.ViewModels"
+        xmlns:conv="clr-namespace:DemoRent.Converters"        
+        mc:Ignorable="d"
+        Title="MainWindow" Height="553.2" Width="849">
+    <Window.Resources>
+        <vm:ShellViewModel x:Key="shellVm" />
+        <conv:BooleanInverterConverter x:Key="InvertBool"/>
+        <conv:AvailableToVisibleConverter x:Key="VisibleIfAvailable" />
+        <conv:AvailableToCollapseConverter x:Key="CollapseIfAvailable" />
+        <conv:BookedToReturnVisibilityConverter x:Key="VisibleIfBooked" />
+        <conv:InvalidValuesConverter x:Key="InvalidValue" />
+        <conv:DiscountToPercentageConverter x:Key="DiscountToPercentage" />
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource shellVm}"
+          Background="#FFC0D2DE" Margin="-4,0,-4,-2">
+
+        <!--Car listing Grid-->
+
+        <Rectangle Fill="LightSlateGray" Margin="2,499,0,2" Stroke="Black" Grid.ColumnSpan="2"/>
+
+        <Grid Margin="32,76,588,17"
+              IsEnabled="{Binding Editing, Converter={StaticResource InvertBool}}">
+
+
+            <Label Content="Vehicle Collection" HorizontalAlignment="Left" VerticalAlignment="Top"
+            FontWeight="Bold" Width="119" Height="26" Margin="5,-3,0,0"/>
+
+            <ListBox ItemsSource="{Binding Cars}" 
+                SelectedItem="{Binding SelectedCar}"
+                HorizontalAlignment="Left"
+                Height="312" Margin="4,55,0,0" VerticalAlignment="Top" Width="207" Grid.ColumnSpan="2" Background="#FFEDF1F3"/>
+            <TextBox HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
+                Text="{Binding SearchString}" Margin="4,28,0,0" Grid.ColumnSpan="2" />
+            
+            
+            <Button Content="Search" HorizontalAlignment="Left" Margin="136,30,0,0" VerticalAlignment="Top" Width="75" Height="20" Grid.ColumnSpan="2"/>
+            
+            
+            <Button Command="{Binding AddCarCommand}" Content="New Car" HorizontalAlignment="Left" Margin="4,378,0,0" VerticalAlignment="Top" Width="64"
+                    Background="#FFBED8B2"/>
+
+            <Button x:Name="AddCar" Content="With Caliburn" HorizontalAlignment="Left" Margin="4,400,0,0" VerticalAlignment="Top" Width="64"
+                    Background="#FFBED8B2"/>
+
+            <TextBox HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
+                     x:Name="SelectedCar_Brand" Margin="4,330,0,0" Grid.ColumnSpan="2" />
+
+
+            <Button Content="Remove Car" HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"
+                    x:Name="RemoveCar" Grid.ColumnSpan="2"/>
+
+        </Grid>
+
+        <!--Car details control-->
+        <Label Content="Vehicle Details" HorizontalAlignment="Left" Margin="261,73,0,0" VerticalAlignment="Top"
+            FontWeight="Bold" Height="26" Width="92"/>
+
+        <Grid Height="180" VerticalAlignment="Top"
+          DataContext="{StaticResource shellVm}" Margin="265,93,252,0"
+              Visibility="{Binding Editing, Converter={StaticResource CollapseIfAvailable}}">
+
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="110" Margin="5,12,0,0" VerticalAlignment="Top" Width="105" Background="DimGray" Grid.RowSpan="3"/>
+            <Image HorizontalAlignment="Left" Height="100" Margin="7,16,0,0" VerticalAlignment="Top" Width="100" 
+               Source="{Binding Photo}"/>
+
+            <TextBlock HorizontalAlignment="Right" Margin="0,5,115,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20"
+               x:Name="Brand" Grid.RowSpan="3" />
+            <TextBlock HorizontalAlignment="Left" Margin="222,9,0,0" VerticalAlignment="Top" FontStyle="Italic" FontSize="16"
+               x:Name="Model" Grid.RowSpan="3"/>
+            <TextBlock HorizontalAlignment="Left" Margin="221,40,0,0" VerticalAlignment="Top" 
+               x:Name="Year" />
+            <TextBlock HorizontalAlignment="Left" Margin="221,63,0,0" VerticalAlignment="Top" 
+               Text="{Binding Kms, StringFormat={}{0:N0}, ConverterCulture=pt-PT}" />
+            <TextBlock HorizontalAlignment="Left" Margin="221,86,0,0" VerticalAlignment="Top" 
+               Text="{Binding PricePerMonth, ConverterCulture=pt-PT, StringFormat=C}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="221,109,0,0" VerticalAlignment="Top" 
+               Text="{Binding PricePerKm, ConverterCulture=pt-PT, StringFormat=C}"/>
+
+            <Label Content="Year:" HorizontalAlignment="Left" Margin="185,34,0,0" VerticalAlignment="Top" />
+            <Label Content="Price per Km:" HorizontalAlignment="Left" Margin="142,103,0,0" VerticalAlignment="Top"/>
+            <Label Content="Price per Month:" HorizontalAlignment="Left" Margin="124,80,0,0" VerticalAlignment="Top"/>
+            <Label Content="Kms:" HorizontalAlignment="Left" Margin="185,57,0,0" VerticalAlignment="Top"/>
+
+            <Label Content="Currently booked!" HorizontalContentAlignment="Center" Margin="142,135,29,0" VerticalAlignment="Top" Foreground="#FF1EAC3F" 
+                   FontSize="9" Padding="0" VerticalContentAlignment="Center"
+                   Visibility="{Binding Booked, Converter={StaticResource VisibleIfBooked}}" BorderBrush="Black" Background="#FFDBE4EA" Height="19" />
+            <Label Content="Currently unavailable" HorizontalContentAlignment="Center" Margin="5,156,222,0" VerticalAlignment="Top" Foreground="Red"
+                   FontSize="9" Padding="0" VerticalContentAlignment="Center"
+                   Visibility="{Binding InStore, Converter={StaticResource CollapseIfAvailable}}" Background="#FFDEC0C0" Height="19"/>
+        </Grid>
+
+        <!--Car booking Grid-->
+
+        <Grid Margin="261,249,252,17"              
+              Visibility="{Binding Available, Converter={StaticResource VisibleIfAvailable}}">
+
+            <Label HorizontalAlignment="Left" VerticalAlignment="Top"               
+                Content="Pickup date" Margin="0,4,0,0"/>
+            <DatePicker HorizontalAlignment="Left" Margin="4,26,0,0" VerticalAlignment="Top"
+                SelectedDate="{Binding PickupDate}" Width="156"/>
+
+            <Label HorizontalAlignment="Left" Margin="181,3,0,0" VerticalAlignment="Top"
+                Content="Return date" />
+            <DatePicker HorizontalAlignment="Left" Margin="185,26,0,0" VerticalAlignment="Top"                                    
+                SelectedDate="{Binding ReturnDate}" Width="138"/>
+
+            <Label HorizontalAlignment="Left" Margin="2,55,0,0" VerticalAlignment="Top" Width="66"
+                Content="Kms"/>
+            <TextBox HorizontalAlignment="Left" Width="66" Height="24" Margin="4,75,0,0" 
+                x:Name="ContractedKms"
+                TextWrapping="Wrap" 
+                VerticalAlignment="Top"                
+                Text="{Binding ContractedKms}" />
+
+            <Label HorizontalAlignment="Left" Margin="70,55,0,0" VerticalAlignment="Top"
+                Content="Custom Discount"               
+                Width="106" />
+            <TextBox HorizontalAlignment="Left" Height="24" Margin="88,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="58"
+                Text="{Binding CustomDiscount, Converter={StaticResource DiscountToPercentage}}"
+                IsEnabled="{Binding CustomDiscountAvailable}"/>
+
+            <Label HorizontalAlignment="Left" Margin="22,165,0,0" VerticalAlignment="Top" FontWeight="Bold"                
+                Content="Months:" />
+            <TextBlock HorizontalAlignment="Left" Width="175" Margin="84,171,0,0" VerticalAlignment="Top"
+                Foreground="Red"                
+                Text="{Binding ContractedMonths, Converter={StaticResource InvalidValue}}" />
+
+            <Label HorizontalAlignment="Left" Margin="16,186,0,0" VerticalAlignment="Top" FontWeight="Bold"                
+                Content="Discount:" Width="69" />
+            <TextBlock HorizontalAlignment="Left" Width="175" Margin="84,191,0,0" VerticalAlignment="Top"
+                Foreground="Red"                
+                Text="{Binding Discount, Converter={StaticResource DiscountToPercentage}}" />
+
+            <Label HorizontalAlignment="Left" Margin="2,205,0,-6" VerticalAlignment="Top" FontWeight="Bold"                
+                Content="Rental Cost:" />
+            <TextBlock HorizontalAlignment="Left" Margin="84,210,0,-1" VerticalAlignment="Top"
+                Foreground="Red"                
+                Text="{Binding RentalCost, ConverterCulture=pt-PT, StringFormat=C}" Width="76"/>
+
+            <Label Content="Notes" HorizontalAlignment="Left" Margin="1,98,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Height="42" Margin="4,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="319"
+                     Text="{Binding RentalNote}"/>
+
+            <TextBlock HorizontalAlignment="Left" TextAlignment="Center" Margin="184,71,0,0" VerticalAlignment="Top" Foreground="#FFDE1414" Width="138" Height="36"
+                       Text="There is a conflict with existing rental dates."
+                       TextWrapping="Wrap"
+                       Visibility="{Binding BookingConflict, Converter={StaticResource VisibleIfAvailable}}"/>
+
+            <Button HorizontalAlignment="Left" Margin="247,205,0,0" VerticalAlignment="Top" Width="76"                 
+                Command="{Binding BookCarCommand}"                
+                Content="Book Car"/>
+        </Grid>
+
+        <!--Car Editing Grid-->
+
+        <Grid Margin="270,104,273,161"
+              Visibility="{Binding Editing, Converter={StaticResource VisibleIfAvailable}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="13*"/>
+                <RowDefinition Height="246*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Year:" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Grid.Row="1" />
+            <Label Content="Price per Km:" HorizontalAlignment="Left" Margin="137,79,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+            <Label Content="Price per Month:" HorizontalAlignment="Left" Margin="119,56,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+            <Label Content="Kms:" HorizontalAlignment="Left" Margin="180,33,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="110" VerticalAlignment="Top" Width="105" Background="DimGray" Grid.RowSpan="2"                    />
+            <Image HorizontalAlignment="Left" Height="100" Margin="2,4,0,0" VerticalAlignment="Top" Width="100" 
+                   Source="{Binding Photo}" Grid.RowSpan="2"/>
+            <Button Content="Change" HorizontalAlignment="Left" Margin="16,79,0,0" VerticalAlignment="Top" Width="75" Height="15"
+                    FontSize="9"
+                    Command="{Binding UploadPhotoCommand}" Grid.Row="1"/>
+
+            <TextBox HorizontalAlignment="Left" Height="20" FontSize="12" Margin="110,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102"
+                     x:Name="TempCar_Brand"
+                     FontWeight="Bold" Grid.RowSpan="2"/>
+            <TextBox HorizontalAlignment="Left" Height="20" FontSize="12" Margin="217,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78"
+                     x:Name="TempCar_Model" Grid.RowSpan="2"/>
+            <TextBox HorizontalAlignment="Left" Height="15" FontSize="10" Margin="217,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78"
+                     x:Name="TempCar_Year" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Height="15" FontSize="10" Margin="217,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78"
+                     x:Name="TempCar_Kms" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Height="15" FontSize="10" Margin="217,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78"
+                     x:Name="TempCar_PricePerMonth" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Height="15" FontSize="10" Margin="217,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78"
+                     x:Name="TempCar_PricePerKm" Grid.Row="1"/>
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="134,111,0,0" VerticalAlignment="Top" Width="75"
+                    Command="{Binding EditCarCommand}" Grid.Row="1"/>
+            <Button Content="Save" HorizontalAlignment="Left" Margin="220,111,0,0" VerticalAlignment="Top" Width="75"
+                    Command="{Binding SaveCarCommand}" Grid.Row="1"/>
+        </Grid>
+        <Button Content="Edit details" HorizontalAlignment="Left" Margin="288,222,0,0" VerticalAlignment="Top" Width="75"
+                Command="{Binding EditCarCommand}"
+                Visibility="{Binding Editing, Converter={StaticResource CollapseIfAvailable}}" Height="20"/>
+
+        <!--History and Notes Grid-->
+
+        <ListView Height="375" Width="220" Margin="603,99,26,0" VerticalAlignment="Top"
+                  ItemsSource="{Binding SelectedCar.Rentals}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="210">
+                        <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                            <TextBlock Text="Pickup: " FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding PickupDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="Return: " FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ReturnDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                            <TextBlock Text="Kms: " FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ContractedKms, ConverterCulture=pt-PT, StringFormat=\{0:N0\} km}" FontSize="10"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="Cost: " FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding RentalCost, ConverterCulture=pt-PT, StringFormat=C}" FontSize="10"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Note}" FontSize="12" TextWrapping="Wrap"/>
+                        <TextBlock Text="-------------" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Label Content="Vehicle History" HorizontalAlignment="Left" Margin="603,73,0,0" VerticalAlignment="Top"
+               FontWeight="Bold" Height="26" Width="95" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="LightSlateGray" Height="59" Margin="1,-3,-3,0" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Demo Rent Soft" HorizontalAlignment="Left" Margin="32,-4,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="36" FontFamily="Nirmala UI Semilight" Foreground="White" Height="58" Width="255"/>
+
+        <!--<TextBlock Margin="711,502,2,-3" VerticalAlignment="Top" Foreground="#FFF0F0F0"
+               Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat=dd MMM yyyy\, HH:mm}" FontFamily="Nirmala UI Semilight" Height="25" />-->
+        <Label HorizontalAlignment="Left" Margin="32,495,0,0" VerticalAlignment="Top" Foreground="#FFF0F0F0" Width="140"
+            Content="V0.0.1 BETA" FontFamily="Nirmala UI Semilight" Height="24" />
+
+    </Grid>
+</Window>

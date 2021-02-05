@@ -1,0 +1,58 @@
+[
+  {
+    "Brand": "BMW",
+    "Model": "M2",
+    "PhotoUrl": "Assets\\bmw.jpg",
+    "Photo": null,
+    "Year": 2021,
+    "Kms": 5000,
+    "PricePerKm": 0.09,
+    "PricePerMonth": 300.00,
+    "Booked": false,
+    "InStore": false,
+    "CurrentRental": null,
+    "Rentals": []
+  },
+  {
+    "Brand": "Seat",
+    "Model": "Leon",
+    "PhotoUrl": "Assets\\seat.jpg",
+    "Photo": null,
+    "Year": 2021,
+    "Kms": 2000,
+    "PricePerKm": 0.05,
+    "PricePerMonth": 100.00,
+    "Booked": false,
+    "InStore": true,
+    "CurrentRental": null,
+    "Rentals": []
+  },
+  {
+    "Brand": "Tesla",
+    "Model": "Model S",
+    "PhotoUrl": "Assets\\tesla.jpg",
+    "Photo": null,
+    "Year": 2020,
+    "Kms": 1000,
+    "PricePerKm": 0.01,
+    "PricePerMonth": 350.50,
+    "Booked": false,
+    "InStore": false,
+    "CurrentRental": null,
+    "Rentals": []
+  },
+  {
+    "Brand": "Renault",
+    "Model": "",
+    "PhotoUrl": "",
+    "Photo": null,
+    "Year": 2019,
+    "Kms": 1000,
+    "PricePerKm": 0.05,
+    "PricePerMonth": 100.00,
+    "Booked": false,
+    "InStore": false,
+    "CurrentRental": null,
+    "Rentals": []
+  }
+]

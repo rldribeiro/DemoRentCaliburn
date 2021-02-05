@@ -1,0 +1,36 @@
+{
+  "Cars": [
+    {
+      "Name": "BMW M2",
+      "Year": 2021,
+      "Seats": 5,
+      "Image": "bmw.jpg",
+      "PricePerMonth": "300Euros",
+      "PricePerKm": "0.09Euros"
+    },
+    {
+      "Name": "Seat Leon",
+      "Year": 2021,
+      "Seats": 5,
+      "Image": "seat.jpg",
+      "PricePerMonth": "100Euros",
+      "PricePerKm": "0.05Euros"
+    },
+     {
+      "Name": "Tesla",
+      "Year": 2020,
+      "Seats": 7,
+      "Image": "tesla.jpg",
+      "PricePerMonth": "350.5Euros",
+      "PricePerKm": "0.01Euros"
+    },
+    {
+      "Name": "Renault",
+      "Year": 2019,
+      "Seats": 2,
+      "Image": null,
+      "PricePerMonth": "100Euros",
+      "PricePerKm": "0.05Euros"
+    }
+  ]
+}
