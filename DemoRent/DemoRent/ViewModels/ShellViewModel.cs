@@ -98,6 +98,7 @@ namespace DemoRent.ViewModels
                     NotifyOfPropertyChange(() => SelectedCar);
                     NotifyOfPropertyChange(nameof(CanRemoveCar));
                     NotifyOfPropertyChange(nameof(CanAddCar));
+                    NotifyOfPropertyChange(() => CanIncludeCar);
                 }
             }
         }
@@ -426,7 +427,7 @@ namespace DemoRent.ViewModels
         public SaveCarCommand SaveCarCommand { get; private set; }
         public AddCarCommand AddCarCommand { get; private set; }
         public UploadPhotoCommand UploadPhotoCommand { get; private set; }
-        public RemoveCarCommand RemoveCarCommand { get; private set; }
+        //public RemoveCarCommand RemoveCarCommand { get; private set; }
 
         #endregion
 
@@ -493,7 +494,14 @@ namespace DemoRent.ViewModels
         public bool CanAddCar()
         {
             return SelectedCar.Brand == "Seat";
+        }
 
+        public bool CanIncludeCar => SelectedCar?.Brand == "Seat";
+
+        public void IncludeCar()
+        {
+            SelectedCar = new CarModel();
+            Editing = true;
         }
 
         /// <summary>
@@ -520,10 +528,7 @@ namespace DemoRent.ViewModels
             ListCars();
         }
 
-        public bool CanRemoveCar()
-        {
-            return false;
-        }
+        public bool CanRemoveCar => SelectedCar?.Brand == "BMW";
 
         /// <summary>
         /// Removes a car from the list of cars.
@@ -670,7 +675,7 @@ namespace DemoRent.ViewModels
             this.SaveCarCommand = new SaveCarCommand(this);
             this.AddCarCommand = new AddCarCommand(this);
             this.UploadPhotoCommand = new UploadPhotoCommand(this);
-            this.RemoveCarCommand = new RemoveCarCommand(this);
+            //this.RemoveCarCommand = new RemoveCarCommand(this);
         }
 
         #endregion

@@ -7,7 +7,8 @@
         xmlns:vm="clr-namespace:DemoRent.ViewModels"
         xmlns:conv="clr-namespace:DemoRent.Converters"        
         mc:Ignorable="d"
-        Title="MainWindow" Height="553.2" Width="849">
+        Title="MainWindow" Height="553.2" Width="849"
+        d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}">
     <Window.Resources>
         <vm:ShellViewModel x:Key="shellVm" />
         <conv:BooleanInverterConverter x:Key="InvertBool"/>
@@ -18,7 +19,7 @@
         <conv:DiscountToPercentageConverter x:Key="DiscountToPercentage" />
     </Window.Resources>
 
-    <Grid DataContext="{StaticResource shellVm}"
+    <Grid 
           Background="#FFC0D2DE" Margin="-4,0,-4,-2">
 
         <!--Car listing Grid-->
@@ -53,8 +54,13 @@
                      x:Name="SelectedCar_Brand" Margin="4,330,0,0" Grid.ColumnSpan="2" />
 
 
-            <Button Content="Remove Car" HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"
-                    x:Name="RemoveCar" Grid.ColumnSpan="2"/>
+            <!--<Button Content="Remove Car" HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"-->
+                    <!--x:Name="RemoveCar" Grid.ColumnSpan="2"/>-->
+            <Button x:Name="RemoveCar" Content="Remove Car"  HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"
+                    Grid.ColumnSpan="2"/>
+            <Button x:Name="IncludeCar" Content="Include Car" HorizontalAlignment="Right" Margin="0,400,0,0" VerticalAlignment="Top" Width="75"
+                    Background="#FFBED8B2"/>
+            
 
         </Grid>
 
@@ -63,7 +69,7 @@
             FontWeight="Bold" Height="26" Width="92"/>
 
         <Grid Height="180" VerticalAlignment="Top"
-          DataContext="{StaticResource shellVm}" Margin="265,93,252,0"
+              DataContext="{StaticResource shellVm}" Margin="265,93,252,0"
               Visibility="{Binding Editing, Converter={StaticResource CollapseIfAvailable}}">
 
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="110" Margin="5,12,0,0" VerticalAlignment="Top" Width="105" Background="DimGray" Grid.RowSpan="3"/>
