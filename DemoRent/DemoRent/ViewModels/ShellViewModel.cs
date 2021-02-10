@@ -96,9 +96,8 @@ namespace DemoRent.ViewModels
                     }
 
                     NotifyOfPropertyChange(() => SelectedCar);
-                    NotifyOfPropertyChange(nameof(CanRemoveCar));
-                    NotifyOfPropertyChange(nameof(CanAddCar));
-                    NotifyOfPropertyChange(() => CanIncludeCar);
+                    NotifyOfPropertyChange(() => CanRemoveCar);
+                    NotifyOfPropertyChange(() => CanBookCar);
                 }
             }
         }
@@ -294,6 +293,7 @@ namespace DemoRent.ViewModels
                     CheckBookingConflict();
                     CalculateRentalCost();
                     NotifyOfPropertyChange(() => PickupDate);
+                    NotifyOfPropertyChange(() => CanBookCar);
                 }
             }
         }
@@ -315,6 +315,7 @@ namespace DemoRent.ViewModels
                     CheckBookingConflict();
                     CalculateRentalCost();
                     NotifyOfPropertyChange(()=>ReturnDate);
+                    NotifyOfPropertyChange(() => CanBookCar);
                 }
             }
         }
@@ -329,6 +330,7 @@ namespace DemoRent.ViewModels
 
                 CalculateRentalCost();
                 NotifyOfPropertyChange(() => ContractedKms);
+                NotifyOfPropertyChange(() => CanBookCar);
             }
         }
 
@@ -414,6 +416,7 @@ namespace DemoRent.ViewModels
                 {
                     _bookingConflict = value;
                     NotifyOfPropertyChange(()=>BookingConflict);
+                    NotifyOfPropertyChange(() => CanBookCar);
                 }
             }
         }
@@ -422,12 +425,9 @@ namespace DemoRent.ViewModels
 
         #region Commands
 
-        public BookCarCommand BookCarCommand { get; private set; }
+
         public EditCarCommand EditCarCommand { get; private set; }
-        public SaveCarCommand SaveCarCommand { get; private set; }
-        public AddCarCommand AddCarCommand { get; private set; }
         public UploadPhotoCommand UploadPhotoCommand { get; private set; }
-        //public RemoveCarCommand RemoveCarCommand { get; private set; }
 
         #endregion
 
@@ -452,10 +452,15 @@ namespace DemoRent.ViewModels
             this.SelectedCar = cars[0];
         }
 
+        public bool CanBookCar => SelectedCar != null &&
+                                  ContractedKms > 0 &&
+                                  ReturnDate > PickupDate &&
+                                  !BookingConflict;
+
         /// <summary>
         /// Creates a rental and adds it to the list of rentals of the current vehicle.
         /// </summary>
-        internal void BookCar()
+        public void BookCar()
         {
             var rental = new RentalDetails()
             {
@@ -491,19 +496,6 @@ namespace DemoRent.ViewModels
                 ListCars();
         }
 
-        public bool CanAddCar()
-        {
-            return SelectedCar.Brand == "Seat";
-        }
-
-        public bool CanIncludeCar => SelectedCar?.Brand == "Seat";
-
-        public void IncludeCar()
-        {
-            SelectedCar = new CarModel();
-            Editing = true;
-        }
-
         /// <summary>
         /// Adds a new car to the car collection in the data source and re lists all cars.
         /// </summary>
@@ -516,7 +508,7 @@ namespace DemoRent.ViewModels
         /// <summary>
         /// Saves the details of a car being edited.
         /// </summary>
-        internal void SaveCar()
+        public void SaveCar()
         {
             SelectedCar.CopyDetails(_tempCar);
             if (!CarDAO.Instance.UpdateCar(SelectedCar))
@@ -528,7 +520,7 @@ namespace DemoRent.ViewModels
             ListCars();
         }
 
-        public bool CanRemoveCar => SelectedCar?.Brand == "BMW";
+        public bool CanRemoveCar => SelectedCar?.Brand?.ToLower() != "tesla";
 
         /// <summary>
         /// Removes a car from the list of cars.
@@ -670,12 +662,8 @@ namespace DemoRent.ViewModels
         /// </summary>
         private void InstantiateCommands()
         {
-            this.BookCarCommand = new BookCarCommand(this);
             this.EditCarCommand = new EditCarCommand(this);
-            this.SaveCarCommand = new SaveCarCommand(this);
-            this.AddCarCommand = new AddCarCommand(this);
             this.UploadPhotoCommand = new UploadPhotoCommand(this);
-            //this.RemoveCarCommand = new RemoveCarCommand(this);
         }
 
         #endregion

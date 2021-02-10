@@ -10,7 +10,7 @@
         Title="MainWindow" Height="553.2" Width="849"
         d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}">
     <Window.Resources>
-        <vm:ShellViewModel x:Key="shellVm" />
+        <!--<vm:ShellViewModel x:Key="shellVm" />-->
         <conv:BooleanInverterConverter x:Key="InvertBool"/>
         <conv:AvailableToVisibleConverter x:Key="VisibleIfAvailable" />
         <conv:AvailableToCollapseConverter x:Key="CollapseIfAvailable" />
@@ -44,23 +44,12 @@
             <Button Content="Search" HorizontalAlignment="Left" Margin="136,30,0,0" VerticalAlignment="Top" Width="75" Height="20" Grid.ColumnSpan="2"/>
             
             
-            <Button Command="{Binding AddCarCommand}" Content="New Car" HorizontalAlignment="Left" Margin="4,378,0,0" VerticalAlignment="Top" Width="64"
+            <Button x:Name="AddCar"  Content="New Car" HorizontalAlignment="Left" Margin="4,378,0,0" VerticalAlignment="Top" Width="64"
                     Background="#FFBED8B2"/>
 
-            <Button x:Name="AddCar" Content="With Caliburn" HorizontalAlignment="Left" Margin="4,400,0,0" VerticalAlignment="Top" Width="64"
-                    Background="#FFBED8B2"/>
-
-            <TextBox HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
-                     x:Name="SelectedCar_Brand" Margin="4,330,0,0" Grid.ColumnSpan="2" />
-
-
-            <!--<Button Content="Remove Car" HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"-->
-                    <!--x:Name="RemoveCar" Grid.ColumnSpan="2"/>-->
             <Button x:Name="RemoveCar" Content="Remove Car"  HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"
                     Grid.ColumnSpan="2"/>
-            <Button x:Name="IncludeCar" Content="Include Car" HorizontalAlignment="Right" Margin="0,400,0,0" VerticalAlignment="Top" Width="75"
-                    Background="#FFBED8B2"/>
-            
+
 
         </Grid>
 
@@ -69,7 +58,7 @@
             FontWeight="Bold" Height="26" Width="92"/>
 
         <Grid Height="180" VerticalAlignment="Top"
-              DataContext="{StaticResource shellVm}" Margin="265,93,252,0"
+              Margin="265,93,252,0"
               Visibility="{Binding Editing, Converter={StaticResource CollapseIfAvailable}}">
 
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="110" Margin="5,12,0,0" VerticalAlignment="Top" Width="105" Background="DimGray" Grid.RowSpan="3"/>
@@ -160,7 +149,7 @@
                        Visibility="{Binding BookingConflict, Converter={StaticResource VisibleIfAvailable}}"/>
 
             <Button HorizontalAlignment="Left" Margin="247,205,0,0" VerticalAlignment="Top" Width="76"                 
-                Command="{Binding BookCarCommand}"                
+                x:Name="BookCar"               
                 Content="Book Car"/>
         </Grid>
 
@@ -199,8 +188,8 @@
                      x:Name="TempCar_PricePerKm" Grid.Row="1"/>
             <Button Content="Cancel" HorizontalAlignment="Left" Margin="134,111,0,0" VerticalAlignment="Top" Width="75"
                     Command="{Binding EditCarCommand}" Grid.Row="1"/>
-            <Button Content="Save" HorizontalAlignment="Left" Margin="220,111,0,0" VerticalAlignment="Top" Width="75"
-                    Command="{Binding SaveCarCommand}" Grid.Row="1"/>
+            <Button x:Name="SaveCar" Content="Save" HorizontalAlignment="Left" Margin="220,111,0,0" VerticalAlignment="Top" Width="75"
+                    Grid.Row="1"/>
         </Grid>
         <Button Content="Edit details" HorizontalAlignment="Left" Margin="288,222,0,0" VerticalAlignment="Top" Width="75"
                 Command="{Binding EditCarCommand}"

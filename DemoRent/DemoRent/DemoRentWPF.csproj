@@ -84,10 +84,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Commands\AddCarCommand.cs" />
-    <Compile Include="Commands\BookCarCommand.cs" />
     <Compile Include="Commands\EditCarCommand.cs" />
-    <Compile Include="Commands\RemoveCarCommand.cs" />
     <Compile Include="Commands\SaveCarCommand.cs" />
     <Compile Include="Commands\UploadPhotoCommand.cs" />
     <Compile Include="Converters\AvailableToCollapseConverter.cs" />
