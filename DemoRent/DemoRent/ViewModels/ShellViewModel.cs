@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Caliburn.Micro;
-using DemoRent.Commands;
-using DemoRent.DataAccess;
-using Microsoft.Win32;
-using DemoRent.Models;
-
-namespace DemoRent.ViewModels
+﻿namespace DemoRent.ViewModels
 {
-    public class ShellViewModel : Screen
+    using System;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Linq;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using Caliburn.Micro;
+    using Commands;
+    using DataAccess;
+    using Microsoft.Win32;
+    using Models;
+
+    public class ShellViewModel : Conductor<object>
     {
         #region Attributes
 
@@ -58,6 +57,7 @@ namespace DemoRent.ViewModels
             this.ListCars();
 
             this.InstantiateCommands();
+            ActivateItem(new FlightsViewModel());
         }
 
         #endregion
@@ -96,7 +96,6 @@ namespace DemoRent.ViewModels
                     }
 
                     NotifyOfPropertyChange(() => SelectedCar);
-                    NotifyOfPropertyChange(() => CanRemoveCar);
                     NotifyOfPropertyChange(() => CanBookCar);
                 }
             }
@@ -425,7 +424,6 @@ namespace DemoRent.ViewModels
 
         #region Commands
 
-
         public EditCarCommand EditCarCommand { get; private set; }
         public UploadPhotoCommand UploadPhotoCommand { get; private set; }
 
@@ -519,8 +517,6 @@ namespace DemoRent.ViewModels
 
             ListCars();
         }
-
-        public bool CanRemoveCar => SelectedCar?.Brand?.ToLower() != "tesla";
 
         /// <summary>
         /// Removes a car from the list of cars.
@@ -664,6 +660,11 @@ namespace DemoRent.ViewModels
         {
             this.EditCarCommand = new EditCarCommand(this);
             this.UploadPhotoCommand = new UploadPhotoCommand(this);
+        }
+
+        public void LoadFlights()
+        {
+            ActivateItem(new FlightsViewModel());
         }
 
         #endregion
