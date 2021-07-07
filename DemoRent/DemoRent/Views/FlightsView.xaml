@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DemoRent.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="Flights Arriving" HorizontalAlignment="Left" Margin="603,400,0,0" VerticalAlignment="Top"
+             xmlns:vm="clr-namespace:DemoRent.ViewModels"
+             xmlns:cal="http://www.caliburnproject.org"
+             d:DataContext="{d:DesignInstance Type=vm:FlightsViewModel}"
+             mc:Ignorable="d" Height="342.149" Width="380.992">
+    <Grid Margin="10,0">
+
+        <Label Content="Flights Arriving" Margin="143,144,108,165"
                FontWeight="Bold" />
-        <TextBlock x:Name="LatestFlight" Margin="603,425,0,0"/>
+
+        <TextBlock x:Name="LatestFlightNumber" Text="{Binding LatestFlightNumber}"  Margin="143,177,77,127" RenderTransformOrigin="0.5,0.5" />
+
     </Grid>
 </UserControl>

@@ -1,4 +1,7 @@
-﻿namespace DemoRent.ViewModels
+﻿using System.Reactive.Subjects;
+using DemoRent.Services;
+
+namespace DemoRent.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
@@ -14,6 +17,8 @@
 
     public class ShellViewModel : Conductor<object>
     {
+        private readonly IFlightScheduleProvider _flightScheduleProvider;
+
         #region Attributes
 
         private string _brand;
@@ -47,17 +52,22 @@
         private ImageSource _photo;
         private string _rentalNote;
 
+        private ISubject<CarModel> _latestRentals = new Subject<CarModel>();
+
         #endregion
 
         #region Constructor
 
-        public ShellViewModel()
+        public ShellViewModel(IFlightScheduleProvider flightScheduleProvider)
         {
             this.Cars = new ObservableCollection<CarModel>();
+            this.LatestCarRentals = new ObservableCollection<CarModel>();
             this.ListCars();
 
+            _latestRentals.Subscribe(UpdateLastestRentals);
+
             this.InstantiateCommands();
-            ActivateItem(new FlightsViewModel());
+            ActivateItem(new FlightsViewModel(flightScheduleProvider));
         }
 
         #endregion
@@ -274,6 +284,9 @@
 
         public ObservableCollection<CarModel> Cars { get; set; }
 
+        public ObservableCollection<CarModel> LatestCarRentals { get; set; }
+
+
         // Rental details      
         public DateTime PickupDate
         {
@@ -472,6 +485,7 @@
             SelectedCar.Rentals.Add(rental);
             SelectedCar.Rentals = SelectedCar.Rentals.OrderBy(x => x.ReturnDate).ToList();
             SelectedCar.Kms += this.ContractedKms;
+            _latestRentals.OnNext(SelectedCar);
 
             if (!CarDAO.Instance.UpdateCar(SelectedCar))
             {
@@ -662,9 +676,9 @@
             this.UploadPhotoCommand = new UploadPhotoCommand(this);
         }
 
-        public void LoadFlights()
+        private void UpdateLastestRentals(CarModel rental)
         {
-            ActivateItem(new FlightsViewModel());
+            LatestCarRentals.Add(rental);
         }
 
         #endregion

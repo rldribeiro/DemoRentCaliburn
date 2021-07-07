@@ -1,51 +1,40 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-
-namespace DemoRent.ViewModels
+﻿namespace DemoRent.ViewModels
 {
     using Caliburn.Micro;
     using System;
     using System.Collections.Generic;
     using System.Reactive.Linq;
+    using System.Threading.Tasks;
     using DemoRent.DataAccess;
     using DemoRent.Services;
 
-    public class FlightsViewModel : Screen
+    public class FlightsViewModel : PropertyChangedBase
     {
-        public IEnumerable<FlightDTO> FlightsStatic { get;}
+        private readonly IFlightScheduleProvider _flightScheduleProvider;
+        private string _latestFlightNumber;
 
-        public string LatestFlight { get; private set; }
-
-        //public IObservable<FlightDTO> Flights => GetFlights();
-
-        public FlightsViewModel()
+        public string LatestFlightNumber
         {
-            FlightsStatic = new FlightDTO[]
+            get { return _latestFlightNumber; }
+            set
             {
-                new FlightDTO {AirLine = "TAP", FlightNumber = "12345"},
-                new FlightDTO {AirLine = "Iberia", FlightNumber = "6789"},
-                new FlightDTO {AirLine = "RyanAir", FlightNumber = "42"}
-            };
-            IterateFlights();
-
+                if (_latestFlightNumber != value)
+                {
+                    _latestFlightNumber = value;
+                    NotifyOfPropertyChange(() => LatestFlightNumber);
+                };
+            }
         }
 
-        private async void IterateFlights()
+        public FlightsViewModel(IFlightScheduleProvider flightScheduleProvider)
         {
-            var en = FlightsStatic.GetEnumerator();
-            while (true)
-            {
-                if (!en.MoveNext())
-                {
-                    en.Reset();
-                    en.MoveNext();
-                }
+            _flightScheduleProvider = flightScheduleProvider;
+            flightScheduleProvider.MostRecentFlight.Subscribe(UpdateFlight);
+        }
 
-                LatestFlight = en.Current.FlightNumber;
-
-                NotifyOfPropertyChange(() => LatestFlight);
-                await Task.Delay(500);
-            }
+        private void UpdateFlight(FlightDTO flight)
+        {
+            LatestFlightNumber = $"{flight.AirLine} - {flight.FlightNumber}";
         }
     }
 }

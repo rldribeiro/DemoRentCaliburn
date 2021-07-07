@@ -36,20 +36,18 @@
             <ListBox ItemsSource="{Binding Cars}" 
                 SelectedItem="{Binding SelectedCar}"
                 HorizontalAlignment="Left"
-                Height="312" Margin="4,55,0,0" VerticalAlignment="Top" Width="207" Grid.ColumnSpan="2" Background="#FFEDF1F3"/>
+                Height="139" Margin="4,55,0,0" VerticalAlignment="Top" Width="207" Background="#FFEDF1F3"/>
             <TextBox HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
                 Text="{Binding SearchString}" Margin="4,28,0,0" Grid.ColumnSpan="2" />
-            
-            
+
+
             <Button Content="Search" HorizontalAlignment="Left" Margin="136,30,0,0" VerticalAlignment="Top" Width="75" Height="20" Grid.ColumnSpan="2"/>
-            
-            
-            <Button x:Name="AddCar"  Content="New Car" HorizontalAlignment="Left" Margin="4,378,0,0" VerticalAlignment="Top" Width="64"
+
+
+            <Button x:Name="AddCar"  Content="New Car" HorizontalAlignment="Left" Margin="4,216,0,0" VerticalAlignment="Top" Width="64"
                     Background="#FFBED8B2"/>
 
-            <Button x:Name="RemoveCar" Content="Remove Car"  HorizontalAlignment="Left" Margin="136,378,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"
-                    Grid.ColumnSpan="2"/>
-
+            <Button x:Name="RemoveCar" Content="Remove Car"  HorizontalAlignment="Left" Margin="136,216,0,0" VerticalAlignment="Top" Width="75" Background="#FFCD9797"/>
 
         </Grid>
 
@@ -196,45 +194,65 @@
                 Visibility="{Binding Editing, Converter={StaticResource CollapseIfAvailable}}" Height="20"/>
 
         <!--History and Notes Grid-->
+        <Grid>
+            <ListView Height="200" Width="220" Margin="603,99,26,0" VerticalAlignment="Top"
+                      ItemsSource="{Binding SelectedCar.Rentals}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Width="210">
+                            <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                                <TextBlock Text="Pickup: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding PickuspDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="Return: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding ReturnDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                                <TextBlock Text="Kms: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding ContractedKms, ConverterCulture=pt-PT, StringFormat=\{0:N0\} km}" FontSize="10"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="Cost: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding RentalCost, ConverterCulture=pt-PT, StringFormat=C}" FontSize="10"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Note}" FontSize="12" TextWrapping="Wrap"/>
+                            <TextBlock Text="-------------" FontSize="10" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-        <ListView Height="375" Width="220" Margin="603,99,26,0" VerticalAlignment="Top"
-                  ItemsSource="{Binding SelectedCar.Rentals}" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Width="210">
-                        <StackPanel Orientation="Horizontal" Background="AliceBlue">
-                            <TextBlock Text="Pickup: " FontSize="10" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding PickupDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
-                            <TextBlock Text=" "/>
-                            <TextBlock Text="Return: " FontSize="10" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding ReturnDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+            <ListView Height="153" Width="220" Margin="603,321,26,0" VerticalAlignment="Top"
+                      ItemsSource="{Binding LatestCarRentals}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Width="210">
+                            <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                                <TextBlock Text="{Binding Brand}" FontSize="10"/>
+                                <TextBlock Text="Pickup: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Rentals[0].PickupDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="Return: " FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Rentals[0].ReturnDate, StringFormat=dd-MM-yyyy}" FontSize="10"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Note}" FontSize="12" TextWrapping="Wrap"/>
+                            <TextBlock Text="-------------" FontSize="10" HorizontalAlignment="Center" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Background="AliceBlue">
-                            <TextBlock Text="Kms: " FontSize="10" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding ContractedKms, ConverterCulture=pt-PT, StringFormat=\{0:N0\} km}" FontSize="10"/>
-                            <TextBlock Text=" "/>
-                            <TextBlock Text="Cost: " FontSize="10" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding RentalCost, ConverterCulture=pt-PT, StringFormat=C}" FontSize="10"/>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Note}" FontSize="12" TextWrapping="Wrap"/>
-                        <TextBlock Text="-------------" FontSize="10" HorizontalAlignment="Center" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
 
         <Label Content="Vehicle History" HorizontalAlignment="Left" Margin="603,73,0,0" VerticalAlignment="Top"
                FontWeight="Bold" Height="26" Width="95" Grid.ColumnSpan="2"/>
 
-        <ContentControl x:Name="ActiveItem" />
-
         <Rectangle Fill="LightSlateGray" Height="59" Margin="1,-3,-3,0" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <Label Content="Demo Rent Soft" HorizontalAlignment="Left" Margin="32,-4,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="36" FontFamily="Nirmala UI Semilight" Foreground="White" Height="58" Width="255"/>
 
-        <!--<TextBlock Margin="711,502,2,-3" VerticalAlignment="Top" Foreground="#FFF0F0F0"
-               Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat=dd MMM yyyy\, HH:mm}" FontFamily="Nirmala UI Semilight" Height="25" />-->
         <Label HorizontalAlignment="Left" Margin="32,495,0,0" VerticalAlignment="Top" Foreground="#FFF0F0F0" Width="140"
             Content="V0.0.1 BETA" FontFamily="Nirmala UI Semilight" Height="24" />
+        
+        <ContentControl x:Name="FlightsView" Margin="-10,-10,10,10"/>
 
     </Grid>
 </Window>
